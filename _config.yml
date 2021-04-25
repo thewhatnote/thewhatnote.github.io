@@ -52,6 +52,7 @@ reCaptcha:
   secret                 : "RB6t5eAblSxF/NlHWebzMfmRK4PRNTn9noW3nap4RMvmpDceJGuJZ7+T3sTWWnCzddMP2X+yKb0Fc2OdjoIC2dQf4mISIGuxNN8a4Xp+BIE0h0M5/XRG5YAtDH026yAq7DQdwUmSDFxYVz1B425hfLtDpagS++uF2RHmxdqnHvW1F28CY+4Y+xIH4MuLD7wFlwGWJhsrT0pVc9DyVm+edoaN5FkgcbkLOLmScyD3y1KM4A5tNea63ulMbPxZn92A9RpH4MljbITIcQdC6c5QitHMgr/Ll5R2Br7WKPxIMHTyckn9wmmPKkfHMZ1kDp1g0/G9Qt0hyQNQ5O2rXBE6hiKMwGJJQxxLRyxQYnNsEjI0fF2x28e6WvyCtLSq1TJNoN3/EDzhi1JJaTDW1TJ23Cq8m4AwK74uIIhm1FnjIabXZ5Wnl1L5Zhh1SaniaeLdadnoXKBAToU7mmroByEMm879xLnqeVZcNiGGJp36BiXELCc2WlNXt1hOAciDlRxG/SyQ1W4/o1uXtCkKQ5PahWqmtUEHhbP9Bq5LfX4cQAmm5O3LKljVOBzrrzB5PMQLc/wk4iSz0AWYNKLL5qutmOKC/hg6GtjWQnPobed0keSirVxwGglq9XNiMSFUE/xDL9gAIkVgxeqAqNdR6dWszxQJuhJ2y1DB/PjhUPDkyLU="
 atom_feed:
   path                   : # blank (default) uses feed.xml
+  hide                   : # true, false (default)
 search                   : # true, false (default)
 search_full_content      : # true, false (default)
 search_provider          : # lunr (default), algolia, google
@@ -86,7 +87,11 @@ social:
 
 # Analytics
 analytics:
+<<<<<<< HEAD
   provider               : "google" #false # false (default), "google", "google-universal", "custom"
+=======
+  provider               : false # false (default), "google", "google-universal", "google-gtag", "custom"
+>>>>>>> 4259ffdd6f5a90a9c09ebc9d1b4d69835c86e031
   google:
     tracking_id          : "UA-142176658-1"
     anonymize_ip         : # true, false (default)

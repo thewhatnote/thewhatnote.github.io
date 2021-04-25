@@ -2,7 +2,7 @@
 title: "Configuration"
 permalink: /docs/configuration/
 excerpt: "Settings for configuring and customizing the theme."
-last_modified_at: 2019-10-04T10:54:48-04:00
+last_modified_at: 2020-08-04T11:26:21-04:00
 toc: true
 ---
 
@@ -265,6 +265,32 @@ breadcrumbs: true  # disabled by default
 
 Breadcrumb start link text and separator character can both be changed in the [UI Text data file]({{ "/docs/ui-text/" | relative_url }}).
 
+### Post dates
+
+Enable post date snippets with `show_date: true` in YAML Front Matter.
+
+![post date example]({{ "/assets/images/mm-post-date-example.png" | relative_url }})
+
+Instead of adding `show_date: true` to each post, apply as a default in `_config.yml` like so:
+
+```yaml
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      show_date: true
+```
+
+To disable post date for a post, add `show_date: false` to its YAML Front Matter, overriding what was set in `_config.yml`.
+
+When dates are shown on blog posts or pages, a date format will be chosen to format the date string. The default format is `"%B %-d, %Y"`, which will be displayed like "February 24, 2016". You can choose your date format by referencing this [cheat sheet](https://www.shortcutfoo.com/app/dojos/ruby-date-format-strftime/cheatsheet). For example, use your date format in `_config.yml`.
+
+```yaml
+date_format: "%Y-%m-%d"
+```
+
 ### Reading time
 
 Enable estimated reading time snippets with `read_time: true` in YAML Front Matter. `200` has been set as the default words per minute value --- which can be changed by adjusting `words_per_minute:` in `_config.yml`.
@@ -283,12 +309,26 @@ defaults:
       read_time: true
 ```
 
-To disable reading time for a post, add `read_time: false` its YAML Front Matter to override what was set in `_config.yml`.
+To disable reading time for a post, add `read_time: false` to its YAML Front Matter to override what was set in `_config.yml`.
 
 `words_per_minute` can also be adjusted per-page basis by adding to its YAML Front Matter. This is useful for sites with multi-lingual content where you'd like specify a different value from the site config.
 
 ```yaml
 words_per_minute: 250
+```
+
+### Page meta separator
+
+To customise the separator between the page date and reading time (if both are enabled), edit `.page__meta-sep::before` in a [custom stylesheet]({{ "/docs/stylesheets/" | relative_url }}).
+
+For example,
+
+```css
+.page__meta-sep::before {
+  content: "\2022";
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
 ```
 
 ### Comments
@@ -300,7 +340,7 @@ words_per_minute: 250
 | **disqus**       | Disqus                    |
 | **discourse**    | Discourse                 |
 | **facebook**     | Facebook Comments         |
-| **staticman_v2** | Staticman v2              |
+| **staticman_v2** | Staticman v2 / v3         |
 | **staticman**    | Staticman v1 (deprecated) |
 | **utterances**   | utterances                |
 | **custom**       | Other                     |
@@ -391,13 +431,16 @@ Transform user comments into `_data` files that live inside of your GitHub repos
 **Note:** Looking to migrate comments from a WordPress based site? Give [this tool](https://github.com/arthurlacoste/wordpress-comments-jekyll-staticman) a try.
 {: .notice--info}
 
-**Note:** Please note that as of September 2018, Staticman is reaching GitHub API limits due to its popularity, and it is recommended by its maintainer that users deploy their own instances for production (use `site.staticman.endpoint`).
+**Note:** Please note that as of September 2018, Staticman is reaching GitHub API limits due to its popularity, and it is recommended by its maintainer that users deploy their own instances for production (use `site.staticman.endpoint`).  Consult the Staticman "[Get Started](https://staticman.net/docs/index.html)" guide for more info.
 {: .notice--warning}
 
-##### Add Staticman as a collaborator
+##### Add Staticman as a collaborator on GitHub (legacy)
 
-1. Allow Staticman push access to your GitHub repository by clicking on **Settings**, then the **Collaborators** tab and adding `staticmanapp` as a collaborator.
-2. To accept the pending invitation visit: `https://api.staticman.net/v2/connect/{your GitHub username}/{your repository name}`. Consult the Staticman "[Get Started](https://staticman.net/docs/index.html)" guide for more info.
+1. Allow Staticman push access to your GitHub repository by clicking on **Settings**, then the **Collaborators** tab and adding your GitHub bot as a collaborator.
+2. To accept the pending invitation visit: `https://{your Staticman v2/3 API}/v[2|3]/connect/{your GitHub username}/{your repository name}`.
+
+**Note:** The new GitHub App authentication method is recommended for GitHub repositories to avoid the API rate limit.
+{: .notice--info}
 
 ##### Configure Staticman
 
@@ -490,7 +533,7 @@ By default comment moderation is enabled in `staticman.yml`. As new comments are
 
 To skip this moderation step simply set `moderation: false`.
 
-**ProTip:** Create a GitHub webhook that sends a `POST` request to the following payload URL `https://api.staticman.net/v2/webhook` and triggers a "Pull request" event to delete Staticman branches on merge.
+**ProTip:** Create a GitHub webhook that sends a `POST` request to the following payload URL `https://{your Staticman API URL}/v2/webhook` and triggers a "Pull request" event to delete Staticman branches on merge.
 {: .notice--info}
 
 ![pull-request webhook]({{ "/assets/images/mm-staticman-pr-webhook.jpg" | relative_url }})
@@ -524,6 +567,15 @@ atom_feed:
 
 **Note:** By default the site feed is linked in two locations: inside the [`<head>` element](https://github.com/mmistakes/minimal-mistakes/blob/master/_includes/head.html) and at the bottom of every page in the [site footer](https://github.com/mmistakes/minimal-mistakes/blob/master/_includes/footer.html).
 {: .notice--info}
+
+### Disable Feed Icons
+
+By default the theme links to `feed.xml` generated in the root of your site by the **jekyll-feed** plugin. To remove the RSS icon in the header and footer, update `atom_feed` in `_config.yml` like so:
+
+```yaml
+atom_feed:
+  hide: true
+```
 
 ### Site search
 
@@ -670,6 +722,22 @@ Into `_config.yml`
 
 ```yaml
 yandex_site_verification: "2132801JL"
+```
+
+#### Baidu
+
+There are several ways to verify site ownership — the easiest is adding an authentication code to your config file.
+
+Copy and paste the string inside of `content`:
+
+```html
+<meta name="baidu-site-verification" content="code-iA0wScWXN1" />
+```
+
+Into `_config.yml`
+
+```yaml
+baidu_site_verification: "code-iA0wScWXN1"
 ```
 
 #### Twitter Cards and Facebook Open Graph
